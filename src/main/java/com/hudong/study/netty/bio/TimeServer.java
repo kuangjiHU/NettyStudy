@@ -17,10 +17,11 @@ public class TimeServer {
             port = Integer.parseInt(args[0]);
         }
         try (ServerSocket server = new ServerSocket(port)) {
-            Socket  socket= null;
-            while (true){
+            Socket socket = null;
+            while (true) {
                 socket = server.accept();
-                new Thread(new TimeServerHandler(socket)).start();
+                TimeServerHandlerExecutePool singleExecutor = new TimeServerHandlerExecutePool(50, 10000);
+                singleExecutor.execute(new TimeServerHandler(socket));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
