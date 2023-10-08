@@ -46,30 +46,12 @@ public class TimeClient {
             f = b.connect(host, port).sync();
             f.channel().closeFuture().sync();
         } finally {
-            close();
+            group.shutdownGracefully();
         }
     }
 
 
-    public void close() throws InterruptedException {
-        b.
-    }
     public static void main(String[] args) throws Exception {
-        for (int i = 0; i < 50; i++) {
-            int finalI = i;
-            workers.execute(
-                    () -> {
-                        try {
-                            TimeClient timeClient = new TimeClient(finalI);
-                            timeClient.connect(8131, "localhost");
-                            Thread.sleep(1000);
-                            timeClient.close();
-                        } catch (Exception ex) {
-                            log.error(ex.getMessage(), ex);
-                        }
-                    }
-            );
-        }
 
         new TimeClient(1).connect(8129, "localhost");
     }
