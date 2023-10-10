@@ -31,3 +31,9 @@ IO_Handler->Reactor_Thread: 异步写ByteBuffer到SocketChannel
 ### Netty入门
 
 ![服务端](docs/images/Server.png)
+
+## TCP粘包、拆包
+### TCP 基础概念
+![img.png](docs/images/tcp_strcucture.png)
+###
+
