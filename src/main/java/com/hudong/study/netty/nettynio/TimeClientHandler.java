@@ -20,19 +20,22 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class TimeClientHandler extends ChannelInboundHandlerAdapter {
 
-    private final ByteBuf firstMsg;
-    private final int clientNO;
+    private int counter;
+    private byte[] req;
 
-    public TimeClientHandler(int clientNO) {
-        this.clientNO = clientNO;
-        byte[] req = "QUERY TIME ORDER".getBytes();
-        firstMsg = Unpooled.buffer(req.length);
-        firstMsg.writeBytes(req);
+
+    public TimeClientHandler() {
+        req = ("QUERY TIME ORDER" + System.lineSeparator()).getBytes();
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ctx.writeAndFlush(firstMsg);
+        ByteBuf msg = null;
+        for (int i = 0; i < 100; i++) {
+            msg = Unpooled.buffer(req.length);
+            msg.writeBytes(req);
+            ctx.writeAndFlush(msg);
+        }
     }
 
     @Override
@@ -41,7 +44,7 @@ public class TimeClientHandler extends ChannelInboundHandlerAdapter {
         byte[] req = new byte[buf.readableBytes()];
         buf.readBytes(req);
         String body = new String(req, StandardCharsets.UTF_8);
-        System.out.println("Now is client "+clientNO +" : "+ body);
+        System.out.println("Now is "+counter +" : "+ body);
     }
 
     @Override

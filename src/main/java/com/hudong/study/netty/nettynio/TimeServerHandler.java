@@ -19,25 +19,29 @@ import java.util.Date;
  */
 public class TimeServerHandler extends ChannelInboundHandlerAdapter {
 
+    private int count;
+
     @Override
-    public void  channelRead(ChannelHandlerContext ctx, Object msg) throws Exception{
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf buf = (ByteBuf) msg;
         byte[] req = new byte[buf.readableBytes()];
         buf.readBytes(req);
-        String body = new String(req, StandardCharsets.UTF_8);
-        System.out.println("The time Server receive order: " + body);
+        String body = new String(req, StandardCharsets.UTF_8)
+                .substring(0, req.length - System.lineSeparator().length());
+        System.out.println("The time Server receive order: " + body + " ; the counter is : " + ++count);
         String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(body) ? new Date(System.currentTimeMillis()).toString() : "BAD ORDER";
+        currentTime += System.lineSeparator();
         ByteBuf resp = Unpooled.copiedBuffer(currentTime.getBytes());
         ctx.write(resp);
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception{
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         ctx.flush();
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)  {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         ctx.close();
     }
 }

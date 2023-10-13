@@ -39,7 +39,7 @@ public class TimeClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        socketChannel.pipeline().addLast(new TimeClientHandler(clientNO.get()));
+                        socketChannel.pipeline().addLast(new TimeClientHandler());
                     }
                 });
         try {
@@ -53,6 +53,6 @@ public class TimeClient {
 
     public static void main(String[] args) throws Exception {
 
-        new TimeClient(1).connect(8129, "localhost");
+        new TimeClient(1).connect(8131, "localhost");
     }
 }
