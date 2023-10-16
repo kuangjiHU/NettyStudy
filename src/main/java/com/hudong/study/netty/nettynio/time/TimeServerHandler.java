@@ -1,4 +1,4 @@
-package com.hudong.study.netty.nettynio;
+package com.hudong.study.netty.nettynio.time;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -23,16 +23,12 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf buf = (ByteBuf) msg;
-        byte[] req = new byte[buf.readableBytes()];
-        buf.readBytes(req);
-        String body = new String(req, StandardCharsets.UTF_8)
-                .substring(0, req.length - System.lineSeparator().length());
+        String body = (String) msg;
         System.out.println("The time Server receive order: " + body + " ; the counter is : " + ++count);
         String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(body) ? new Date(System.currentTimeMillis()).toString() : "BAD ORDER";
         currentTime += System.lineSeparator();
         ByteBuf resp = Unpooled.copiedBuffer(currentTime.getBytes());
-        ctx.write(resp);
+        ctx.writeAndFlush(resp);
     }
 
     @Override
