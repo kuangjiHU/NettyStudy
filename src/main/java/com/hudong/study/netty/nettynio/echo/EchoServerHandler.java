@@ -18,11 +18,11 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     public static final String EVHO_REQ = "hkj is handsome";
 
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        String body = (String) msg;
-        System.out.println("This is " + ++counter + " times receive client : [" + body + "]");
-        body += "$_";
-        ByteBuf echo = Unpooled.copiedBuffer(body.getBytes());
-        ctx.writeAndFlush(echo);
+//        String body = (String) msg;
+        System.out.println("This is " + ++counter + " times receive client : [" + msg + "]");
+//        body += "$_";
+//        ByteBuf echo = Unpooled.copiedBuffer(body.getBytes());
+//        ctx.writeAndFlush(echo);
     }
 
     @Override
